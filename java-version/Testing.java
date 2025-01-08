@@ -1,12 +1,17 @@
 import java.io.*;
 
+// Takes a pretrained network's incorrect guesses and converts 
+// the corresponding ubyte image data into a jgp
+
 public class Testing {
 
-    // TODO method comment
     public static void main(String[] args) throws IOException {
 
-        NNetwork testNetwork = new NNetwork(new File("configurations/toddlerNN2-128-64-32-16-978.txt"));
-        DataReader d = new DataReader("data/t10k-images.idx3-ubyte", "data/t10k-labels.idx1-ubyte");
+        NNetwork testNetwork = new NNetwork(
+            new File("java-version/saved-network-weights/testNN2-128-64-32-16-978.txt"));
+        DataReader d = new DataReader(
+            "java-version/mnist-data/t10k-images.idx3-ubyte",
+            "java-version/mnist-data/t10k-labels.idx1-ubyte");
         double testCost = 0;
         double correctPredictions = 0;
         double totalExamples = 0;

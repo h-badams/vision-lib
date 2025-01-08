@@ -13,8 +13,8 @@ public class WeightVisualizer {
     public static double maxWeight = 0;
 
     public static void main(String[] args) throws FileNotFoundException {
-        NNetwork network = new NNetwork(new File(("configurations/toddlerNN1-32-32-965.txt")));
-
+        NNetwork network = new NNetwork(
+            new File(("java-version/saved-network-weights/testNN1-32-32-965.txt")));
         for(int i = 0; i < 32; i++) {
             for(int j = 0; j < IMG_WIDTH * IMG_WIDTH; j++) {
                 double w = network.layers.get(0).weights[i][j];
@@ -26,7 +26,7 @@ public class WeightVisualizer {
             }
         }
 
-        for(int i = 0; i < 32; i++) {
+        for(int i = 0; i < 10; i++) {
             Color[][] pixels = new Color[IMG_WIDTH][IMG_WIDTH];
             for(int j = 0; j < IMG_WIDTH * IMG_WIDTH; j++) {
                 pixels[j / IMG_WIDTH][j % IMG_WIDTH] = specialFunction(network.layers.get(0).weights[i][j]);
@@ -34,19 +34,18 @@ public class WeightVisualizer {
 
             Picture img = new Picture(IMG_WIDTH, IMG_WIDTH);
             img.setPixels(pixels);
-            String path = "weightvisuals/neuron-" + i + ".jpg";
+            String path = "java-version/pictures/neuron-" + i + ".jpg";
             img.save(path);
         }
     }
 
+    // Colors a pixel blue for positive weights, red for negative weights
     public static Color specialFunction(double x) {
+        int intensity = (int) (400.0 * Math.abs(x) / maxWeight);
+        intensity = Math.min(intensity, 255);
         if(x > 0) {
-            int intensity = (int) (300.0 * x / maxWeight);
-            intensity = Math.min(intensity, 255);
             return new Color(intensity, 0, 0);
         } else {
-            int intensity = (int) (300.0 * x / minWeight);
-            intensity = Math.min(intensity, 255);
             return new Color(0, 0, intensity);
         }
     }
