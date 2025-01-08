@@ -1,6 +1,6 @@
 import java.io.*;
 
-// TODO class comment
+// Reads in ubyte data
 
 public class DataReader {
 

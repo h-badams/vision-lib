@@ -1,28 +1,28 @@
 import java.io.*;
 import java.util.*;
 
-// TODO class comment
+// Validating the NNetwork code on the MNIST data set
 
 public class Client {
 
     // Hyperparameters
-    private static final int EPOCHS = 30;
+    private static final int EPOCHS = 6;
     private static final double BATCH_SIZE = 128.0;
     private static final double LR_DECAY = 0.95;
     private static double LEARNING_RATE = 0.06;
 
-    // TODO method comment
-
     public static void main(String[] args) throws IOException {
 
-        NNetwork toddler = new NNetwork(784, 64, 32, 16, 10);
+        NNetwork testNet = new NNetwork(784, 32, 16, 10);
 
         for(int epoch = 0; epoch < EPOCHS; epoch++) {
             double epochCost = 0;
             double correctPredictions = 0;
             double totalExamples = 0;
 
-            DataReader d = new DataReader("data/train-images.idx3-ubyte", "data/train-labels.idx1-ubyte");
+            DataReader d = new DataReader(
+                "java-version/mnist-data/train-images.idx3-ubyte",
+                 "java-version/mnist-data/train-labels.idx1-ubyte");
 
             while(true) {
                 double[][] data = d.readImage();
@@ -34,19 +34,19 @@ public class Client {
                 double[] input = data[0];
                 double label = data[1][0];
 
-                toddler.forwardPropNetwork(input);
+                testNet.forwardPropNetwork(input);
 
-                epochCost += toddler.getCost(label);
+                epochCost += testNet.getCost(label);
 
-                if(toddler.getHighestActivation() == label) {
+                if(testNet.getHighestActivation() == label) {
                     correctPredictions++;
                 }
                 totalExamples++;
 
-                toddler.backPropNetwork(label, input);                
+                testNet.backPropNetwork(label, input);                
 
                 if(totalExamples % BATCH_SIZE == 0 && totalExamples != 0) {
-                    toddler.updateParams(LEARNING_RATE, BATCH_SIZE);
+                    testNet.updateParams(LEARNING_RATE, BATCH_SIZE);
                 }
             }
             LEARNING_RATE *= LR_DECAY;
@@ -58,9 +58,9 @@ public class Client {
         }
 
         // check testing data set 
-        logTestAccurracy(toddler);
+        logTestAccurracy(testNet);
 
-        saveNetworkConfiguration(toddler);
+        saveNetworkConfiguration(testNet);
     }
 
     public static void saveNetworkConfiguration(NNetwork network) throws IOException {
@@ -70,7 +70,7 @@ public class Client {
         if(response.equals("y")) {
             System.out.print("Name the configuration file: ");
             String filename = sc.nextLine();
-            String path = "configurations/" + filename;
+            String path = "java-version/saved-network-weights/" + filename;
 
             File config = new File(path);
             config.createNewFile();
@@ -83,7 +83,9 @@ public class Client {
     }
 
     public static void logTestAccurracy(NNetwork network) throws IOException {
-        DataReader d = new DataReader("data/t10k-images.idx3-ubyte", "data/t10k-labels.idx1-ubyte");
+        DataReader d = new DataReader(
+            "java-version/mnist-data/t10k-images.idx3-ubyte",
+            "java-version/mnist-data/t10k-labels.idx1-ubyte");
         double testCost = 0;
         double correctPredictions = 0;
         double totalExamples = 0;

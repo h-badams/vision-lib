@@ -1,14 +1,18 @@
 import java.io.*;
 import java.awt.*;
 
+// (MNIST specific)
+// evaluates a pretrained network on a 28x28 greyscale image
+
 public class GuessPicture {
 
     public static void main(String[] args) throws FileNotFoundException{
         
-        NNetwork network = new NNetwork(new File("configurations/toddlerNN2-128-64-32-16-978.txt"));
-        //NNetwork network = new NNetwork(new File("configurations/toddlerNN1-32-32-965.txt"));
-        Picture guess = new Picture("pictures/testing-set-picture-9.jpg");
-        //Picture guess = new Picture("featurevisuals/5-1000000-steps.jpg");
+        NNetwork network = new NNetwork(
+            new File("java-version/saved-network-weights/testNN2-128-64-32-16-978.txt"));
+
+        // Make your own greyscale 28x28 image, put it in the pictures folder
+        Picture guess = new Picture("java-version/pictures/testing-set-picture-9.jpg");
         Color[][] pixels = guess.getPixels();
 
         double[] input = new double[784];
